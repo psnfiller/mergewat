@@ -55,6 +55,29 @@ def merge(stack):
   assert sum(stack) == sum(output), output
   return output, merge_size, merge_point, depth
 
+def merge4(stack, max_stack):
+  merge_point = -1
+  merge_size = 0
+  size = 0
+  for i in xrange(len(stack)):
+    if stack[i] < size:
+      if merge_point < i:
+        merge_point = i
+        merge_size = size + stack[i]
+    size += stack[i]
+  if merge_point == -1:
+    return stack, 0
+  below_merge_point = len(stack[merge_point+1:])
+  end_merge_size = 0
+  if (below_merge_point + 1) > max_stack:
+    end = merge_point+1 + (max_stack - 2)
+    for i in xrange(end, len(stack)):
+      end_merge_size += stack[i]
+    output = [merge_size] + stack[merge_point+1:end] + [end_merge_size]
+  else:
+    output = [merge_size] + stack[merge_point+1:]
+  assert sum(stack) == sum(output), output
+  return output, merge_size + end_merge_size
 def merge3(stack):
   merge_point = -1
   merge_size = 0
@@ -101,14 +124,15 @@ def merge2(stack):
 
 def cap_stack(stack, size):
   """
-  >>>cap_stack([1,1,1,1], 2)
+  >>> cap_stack([1,1,1,1], 2)
   ([1, 3], 3)
+
   """
 
   merge_size = 0
-  for i in xrange(size, len(stack)):
+  for i in xrange(size-1, len(stack)):
     merge_size += stack[i]
-  return stack[:size] + [merge_size], merge_size
+  return stack[:size-1] + [merge_size], merge_size
 
 
 
@@ -118,9 +142,10 @@ def run(total, minor_size):
   max_stack = 5
   for i in xrange(total / minor_size):
     stack = minor(stack, minor_size)
-    stack,s = merge3(stack)
+    stack,s = merge4(stack)
     tally += s
     if len(stack) > max_stack:
+      assert False
       #stack, s = cap_stack(stack, max_stack)
       #tally += s
       pass
