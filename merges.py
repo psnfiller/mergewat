@@ -84,15 +84,36 @@ def run(total, minor_size, max_stack, merge):
     tally += s
     stack_tally.append(len(stack))
   print minor_size, max_stack, float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
+  return float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
 
 
 def main():
   stack = []
   tally = 0
   total = 1000* 1000
+  smallest = {}
   for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
-      run(total, minor_size, max_stack, merge)
+      v = run(total, minor_size, max_stack, smallest_merge)
+      k = '%d-%d' % (minor_size, max_stack)
+      smallest[k] = v
+  normal = {}
+  for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
+    for max_stack in (1,2,3,5,8,10,12,14,16,32):
+      v = run(total, minor_size, max_stack, merge)
+      k = '%d-%d' % (minor_size, max_stack)
+      normal[k] = v
+  for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
+    for max_stack in (1,2,3,5,8,10,12,14,16,32):
+      k = '%d-%d' % (minor_size, max_stack)
+      print minor_size, max_stack,
+      avg_merge, avg_stack, stddev_stack = smallest[k]
+      print "%2.1f %2.1f" % (avg_merge, avg_stack),
+      avg_merge, avg_stack, stddev_stack = normal[k]
+      print "%2.1f %2.1f" % (avg_merge, avg_stack)
+
+
+
 
 
 
