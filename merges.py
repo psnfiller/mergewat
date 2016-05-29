@@ -87,6 +87,8 @@ def merge4(stack, max_stack):
   else:
     output = [merge_size] + stack[merge_point+1:]
   assert sum(stack) == sum(output), output
+  assert len(output) <= max_stack
+
   return output, merge_size + end_merge_size
 def merge3(stack):
   merge_point = -1
