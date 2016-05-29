@@ -23,9 +23,11 @@ def merge(stack):
   >>> merge([1,1])
   ([1, 1], 0, 0, False)
   >>> merge([1,1,1])
-  ([1, 2], 2, 1, False)
+  ([1, 1, 1], 0, 0, False)
+  >>> merge([1,1,2])
+  ([1, 1, 2], 0, 0, False)
   >>> merge([1,1,1,1,1,1])
-  ([1, 5], 5, 1, True)
+  ([1, 1, 4], 4, 2, True)
 
   """
   max_depth = 5
@@ -37,7 +39,7 @@ def merge(stack):
 
   size = 0
   for i in xrange(len(stack)):
-    if stack[i] <= size:
+    if stack[i] < size:
       if merge_point > i:
         merge_point = i
     size += stack[i]
@@ -91,7 +93,7 @@ def run(total, minor_size):
   tally = 0
   for i in xrange(total / minor_size):
     stack = minor(stack, minor_size)
-    #print stack
+    print stack
     stack,s, _, depth  = merge(stack)
     tally += s
     print "merge", stack,  s, tally, depth
@@ -100,7 +102,7 @@ def run(total, minor_size):
 def main():
   stack = []
   tally = 0
-  total = 1000
+  total = 10
   #minor_size = 100
   #print minor_size, run(total, minor_size)
   #minor_size = 10
