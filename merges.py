@@ -57,14 +57,16 @@ def merge(stack):
 
 def merge4(stack, max_stack):
   """
-  >>> merge([1,1])
-  ([1, 1], 0, 0, False)
-  >>> merge([1,1,1])
-  ([1, 1, 1], 0, 0, False)
-  >>> merge([1,1,2])
-  ([1, 1, 2], 0, 0, False)
-  >>> merge([1,1,1,1,1,1])
-  ([1, 1, 4], 4, 2, True)
+  >>> merge4([1,1], 5)
+  ([1, 1], 0)
+  >>> merge4([1,1,1], 5)
+  ([3], 3)
+  >>> merge4([1,1,2], 5)
+  ([1, 1, 2], 0)
+  >>> merge4([1,1,1,1,1,1], 5)
+  ([6], 6)
+  >>> merge4([100, 100, 300, 700, 1500, 3100], 5)
+  ([100, 100, 300, 700, 4600], 4600)
   """
   merge_point = -1
   merge_size = 0
@@ -76,12 +78,13 @@ def merge4(stack, max_stack):
         merge_size = size + stack[i]
     size += stack[i]
   if merge_point == -1:
-    return stack, 0
-  below_merge_point = len(stack[merge_point+1:])
+    assert merge_size == 0
+    return cap_stack(stack, max_stack)
+  items_below_merge_point = len(stack) - merge_point
   end_merge_size = 0
-  if (below_merge_point + 1) > max_stack:
-    end = merge_point+1 + (max_stack - 2)
-    for i in xrange(end, len(stack)):
+  if (items_below_merge_point + 1) > max_stack:
+    end = max_stack - 2
+    for i in xrange(max_stack, len(stack)):
       end_merge_size += stack[i]
     output = [merge_size] + stack[merge_point+1:end] + [end_merge_size]
   else:
@@ -138,9 +141,12 @@ def cap_stack(stack, size):
   """
   >>> cap_stack([1,1,1,1], 2)
   ([1, 3], 3)
-
+  >>> cap_stack([1,1,1,1], 5)
+  ([1, 1, 1, 1], 0)
   """
 
+  if len(stack) <= size:
+    return stack, 0
   merge_size = 0
   for i in xrange(size-1, len(stack)):
     merge_size += stack[i]
@@ -154,14 +160,15 @@ def run(total, minor_size):
   max_stack = 5
   for i in xrange(total / minor_size):
     stack = minor(stack, minor_size)
-    stack,s = merge4(stack, max_stack)
+    stack_, s = merge4(stack, max_stack)
     tally += s
-    if len(stack) > max_stack:
-      assert False, stack
+    if len(stack_) > max_stack:
+      assert False, (stack, stack_)
       #stack, s = cap_stack(stack, max_stack)
       #tally += s
       pass
     #print "merge", stack,  s, tally
+    stack = stack_
   print minor_size, tally, float(tally) / total, max_stack
   return tally
 
