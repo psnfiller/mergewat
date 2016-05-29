@@ -1,5 +1,6 @@
 import doctest
 import sys
+import numpy
 
 def minor(stack, size):
   return [size] + stack
@@ -76,29 +77,22 @@ def cap_stack(stack, size):
 def run(total, minor_size, max_stack, merge):
   stack = []
   tally = 0
-  stack_tally= 0.0
-  read_cost = 0
+  stack_tally = []
   for i in xrange(total / minor_size):
     stack = minor(stack, minor_size)
     stack, s = merge(stack, max_stack)
     tally += s
-    print stack
-    stack_tally += len(stack)
-    for x in xrange((total % minor_size) + 1):
-      read_cost += len(stack)
-  print minor_size, max_stack, float(tally) / total, stack_tally/i, read_cost
+    stack_tally.append(len(stack))
+  print minor_size, max_stack, float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
 
 
 def main():
   stack = []
   tally = 0
   total = 1000* 1000
-  #for minor_size in (2048,1024,512,256,128,100, 10, 1):
-    #for max_stack in (1,2,3,5,8,9,10,11,12,13,14,15,16,32):
-    #for max_stack in (1,2,3,5,8,10,12,14,16,32):
-  minor_size = 128
-  max_stack = 5
-  run(total, minor_size, max_stack, merge)
+  for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
+    for max_stack in (1,2,3,5,8,10,12,14,16,32):
+      run(total, minor_size, max_stack, merge)
 
 
 
