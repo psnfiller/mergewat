@@ -83,9 +83,24 @@ def run(total, minor_size, max_stack, merge):
     stack, s = merge(stack, max_stack)
     tally += s
     stack_tally.append(len(stack))
-  print minor_size, max_stack, float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
+  #print minor_size, max_stack, float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
   return float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
 
+
+def humanize(i):
+  """
+  >>> humanize(123)
+  "123"
+  >>> humanize(1234)
+  "1.234k"
+  """
+  suffixes = ['', 'k', 'M', 'B']
+  s = 0
+  i = float(i)
+  while i > 1000:
+    i/=1000
+    s+=1
+  return "%3.1f%s" % (i, suffixes[s])
 
 def main():
   stack = []
@@ -108,9 +123,9 @@ def main():
       k = '%d-%d' % (minor_size, max_stack)
       print minor_size, max_stack,
       avg_merge, avg_stack, stddev_stack = smallest[k]
-      print "%2.1f %2.1f" % (avg_merge, avg_stack),
+      print "%s %s" % (humanize(avg_merge), humanize(avg_stack)),
       avg_merge, avg_stack, stddev_stack = normal[k]
-      print "%2.1f %2.1f" % (avg_merge, avg_stack)
+      print "%s %s" % (humanize(avg_merge), humanize(avg_stack))
 
 
 
