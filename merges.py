@@ -18,6 +18,22 @@ def smallest_merge(stack, max_stack):
       merge_point = i
   return stack[:merge_point] + [smallest] + stack[merge_point+2:], smallest
 
+def smallest_n_merge(stack, max_stack, n):
+  """
+  >>> smallest_n_merge([1,1,1,1,1], 3, 3)
+  ([1,1,3], 3)
+  """
+  if len(stack) <= max_stack:
+    return stack, 0
+  smallest = sys.maxint
+  merge_point = -1
+  for i in xrange(len(stack) - n):
+    v = sum(stack[i:i+n])
+    if v <= smallest:
+      smallest = v
+      merge_point = i
+  return stack[:merge_point] + [smallest] + stack[merge_point+n:], smallest
+
 
 def merge(stack, max_stack):
   """
