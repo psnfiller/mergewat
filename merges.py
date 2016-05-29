@@ -90,9 +90,9 @@ def run(total, minor_size, max_stack, merge):
 def humanize(i):
   """
   >>> humanize(123)
-  "123"
+  '123'
   >>> humanize(1234)
-  "1.234k"
+  '1.2k'
   """
   suffixes = ['', 'k', 'M', 'B']
   s = 0
@@ -100,6 +100,8 @@ def humanize(i):
   while i > 1000:
     i/=1000
     s+=1
+  if s == 0:
+    return "%d" % int(i)
   return "%3.1f%s" % (i, suffixes[s])
 
 def main():
