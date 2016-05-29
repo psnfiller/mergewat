@@ -18,6 +18,7 @@ def smallest_merge(stack, max_stack):
       merge_point = i
   return stack[:merge_point] + [smallest] + stack[merge_point+2:], smallest
 
+# TODO(psn): this is really slow.
 def smallest_n_merge(stack, max_stack, n):
   """
   >>> smallest_n_merge([1,1,1,1,1], 3, 3)
@@ -33,6 +34,9 @@ def smallest_n_merge(stack, max_stack, n):
       smallest = v
       merge_point = i
   return stack[:merge_point] + [smallest] + stack[merge_point+n:], smallest
+
+def smallest_4_merge(stack, max_stack):
+  return smallest_n_merge(stack, max_stack, 4)
 
 
 def merge(stack, max_stack):
@@ -100,7 +104,7 @@ def run(total, minor_size, max_stack, merge):
     stack, s = merge(stack, max_stack)
     tally += s
     stack_tally.append(len(stack))
-  #print minor_size, max_stack, float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
+  print minor_size, max_stack, float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
   return float(tally) / total, sum(stack_tally)/float(i), numpy.std(stack_tally)
 
 
@@ -124,15 +128,17 @@ def humanize(i):
 def main():
   stack = []
   tally = 0
-  total = 1000* 1000
+  total = 1000 * 1000
   smallest = {}
   #for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
   for minor_size in (128,):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
-      v = run(total, minor_size, max_stack, smallest_merge)
+      v = run(total, minor_size, max_stack, smallest_4_merge)
       k = '%d-%d' % (minor_size, max_stack)
+      #print minor_size, max_stack, v
       smallest[k] = v
 
+  return
   n = set()
   normal = {}
   for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
