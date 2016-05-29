@@ -126,7 +126,8 @@ def main():
   tally = 0
   total = 1000* 1000
   smallest = {}
-  for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
+  #for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
+  for minor_size in (128,):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
       v = run(total, minor_size, max_stack, smallest_merge)
       k = '%d-%d' % (minor_size, max_stack)
