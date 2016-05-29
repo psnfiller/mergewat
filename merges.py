@@ -56,6 +56,16 @@ def merge(stack):
   return output, merge_size, merge_point, depth
 
 def merge4(stack, max_stack):
+  """
+  >>> merge([1,1])
+  ([1, 1], 0, 0, False)
+  >>> merge([1,1,1])
+  ([1, 1, 1], 0, 0, False)
+  >>> merge([1,1,2])
+  ([1, 1, 2], 0, 0, False)
+  >>> merge([1,1,1,1,1,1])
+  ([1, 1, 4], 4, 2, True)
+  """
   merge_point = -1
   merge_size = 0
   size = 0
@@ -142,10 +152,10 @@ def run(total, minor_size):
   max_stack = 5
   for i in xrange(total / minor_size):
     stack = minor(stack, minor_size)
-    stack,s = merge4(stack)
+    stack,s = merge4(stack, max_stack)
     tally += s
     if len(stack) > max_stack:
-      assert False
+      assert False, stack
       #stack, s = cap_stack(stack, max_stack)
       #tally += s
       pass
