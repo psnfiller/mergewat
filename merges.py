@@ -29,7 +29,7 @@ def merge(stack, max_stack):
   ([6], 6)
   >>> merge([100, 100, 300, 700, 1500, 3100], 5)
   ([100, 100, 300, 700, 4600], 4600)
-  >>> merge([2048, 2048, 2048], 5)
+  >>> merge([2048, 2048, 2048], 2)
   ([6144], 6144)
   """
   merge_point = -1
@@ -39,22 +39,20 @@ def merge(stack, max_stack):
       if merge_point < i:
         merge_point = i
     size += stack[i]
-  if merge_point == -1:
-    return cap_stack(stack, max_stack)
+  mp = merge_point
   items_below_merge_point = len(stack) - merge_point
+  if merge_point == -1 or items_below_merge_point == 0 :
+    return cap_stack(stack, max_stack)
   diff = max_stack - items_below_merge_point - 1
   if diff > 0:
-    merge_point += diff
-  #if (items_below_merge_point + 1) > max_stack:
-  #  end = max_stack - 2
-  #  for i in xrange(max_stack, len(stack)):
-  #    end_merge_size += stack[i]
-  #  output = [merge_size] + stack[merge_point+1:end] + [end_merge_size]
-  #else:
-  merge_size = sum(stack[:merge_point])
+    #if merge_point + diff > max_stack:
+    #  merge_point = len(stack) - max_stack -1
+    #else:
+      merge_point += diff
+  merge_size = sum(stack[:merge_point+1])
   output = [merge_size] + stack[merge_point+1:]
-  assert sum(stack) == sum(output), "%r %r" % (output, stack)
-  assert len(output) <= max_stack
+  assert sum(stack) == sum(output), "merge(%r, %r) %r %r" % (stack, max_stack, output, merge_point)
+  assert len(output) <= max_stack, "merge(%r, %r) %r %r %r" % (stack, max_stack, output, merge_point, mp)
   return output, merge_size
 
 def cap_stack(stack, size):
@@ -71,8 +69,6 @@ def cap_stack(stack, size):
   for i in xrange(size-1, len(stack)):
     merge_size += stack[i]
   return stack[:size-1] + [merge_size], merge_size
-
-
 
 def run(total, minor_size, max_stack, merge):
   stack = []
