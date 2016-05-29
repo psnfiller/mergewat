@@ -123,7 +123,7 @@ def main():
       v = run(total, minor_size, max_stack, merge)
       k = '%d-%d' % (minor_size, max_stack)
       normal[k] = v
-      n.add((v[0], v[1], minor_size, max_stack))
+      n.add((v[0]* v[1], v[0], v[1], minor_size, max_stack))
   for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
       k = '%d-%d' % (minor_size, max_stack)
