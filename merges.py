@@ -92,8 +92,7 @@ def main():
   for minor_size in (2048,1024,512,256,128,100, 10, 1):
     #for max_stack in (1,2,3,5,8,9,10,11,12,13,14,15,16,32):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
-      avg_stack = run(total, minor_size, max_stack, merge)
-  print minor_size, max_stack, float(tally) / total, stack_tally/i
+      run(total, minor_size, max_stack, merge)
 
 
 
