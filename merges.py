@@ -1,3 +1,4 @@
+import doctest
 import copy
 import sys
 
@@ -17,6 +18,12 @@ def smallest_merge(stack):
   return stack[:merge_point] + [smallest] + stack[merge_point+2:], smallest
 
 def merge(stack):
+  """Merges.
+
+  >>> merge([1,1,1])
+  ([3], 3, False)
+
+  """
   merge_point = -1
   merge_size = 0
   depth = False
@@ -63,4 +70,7 @@ def main():
 
 
 if __name__ == "__main__":
-  main()
+  doctest.testmod()
+
+#if __name__ == "__main__":
+#  main()
