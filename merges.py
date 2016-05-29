@@ -43,14 +43,17 @@ def merge(stack, max_stack):
   items_below_merge_point = len(stack) - merge_point
   if merge_point == -1 or items_below_merge_point == 0 :
     return cap_stack(stack, max_stack)
-  diff = max_stack - items_below_merge_point - 1
-  if diff > 0:
+  diff = (items_below_merge_point +1 ) - max_stack
+  if items_below_merge_point + 1 > max_stack:
     #if merge_point + diff > max_stack:
     #  merge_point = len(stack) - max_stack -1
     #else:
-      merge_point += diff
+
+
+    merge_point += diff
   merge_size = sum(stack[:merge_point+1])
   output = [merge_size] + stack[merge_point+1:]
+  #print stack, output, merge_point, mp, diff
   assert sum(stack) == sum(output), "merge(%r, %r) %r %r" % (stack, max_stack, output, merge_point)
   assert len(output) <= max_stack, "merge(%r, %r) %r %r %r" % (stack, max_stack, output, merge_point, mp)
   return output, merge_size
@@ -79,6 +82,7 @@ def run(total, minor_size, max_stack, merge):
     stack = minor(stack, minor_size)
     stack, s = merge(stack, max_stack)
     tally += s
+    print stack
     stack_tally += len(stack)
     for x in xrange((total % minor_size) + 1):
       read_cost += len(stack)
@@ -89,10 +93,12 @@ def main():
   stack = []
   tally = 0
   total = 1000* 1000
-  for minor_size in (2048,1024,512,256,128,100, 10, 1):
+  #for minor_size in (2048,1024,512,256,128,100, 10, 1):
     #for max_stack in (1,2,3,5,8,9,10,11,12,13,14,15,16,32):
-    for max_stack in (1,2,3,5,8,10,12,14,16,32):
-      run(total, minor_size, max_stack, merge)
+    #for max_stack in (1,2,3,5,8,10,12,14,16,32):
+  minor_size = 128
+  max_stack = 5
+  run(total, minor_size, max_stack, merge)
 
 
 
