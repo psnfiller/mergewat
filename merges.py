@@ -1,6 +1,7 @@
 import doctest
 import sys
 import numpy
+import operator
 
 def minor(stack, size):
   return [size] + stack
@@ -114,12 +115,15 @@ def main():
       v = run(total, minor_size, max_stack, smallest_merge)
       k = '%d-%d' % (minor_size, max_stack)
       smallest[k] = v
+
+  n = set()
   normal = {}
   for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
       v = run(total, minor_size, max_stack, merge)
       k = '%d-%d' % (minor_size, max_stack)
       normal[k] = v
+      n.add((v[0], v[1], minor_size, max_stack))
   for minor_size in (2048,1024,512,256,128,64,32,16,8,4,2):
     for max_stack in (1,2,3,5,8,10,12,14,16,32):
       k = '%d-%d' % (minor_size, max_stack)
@@ -128,6 +132,8 @@ def main():
       print "%s %s" % (humanize(avg_merge), humanize(avg_stack)),
       avg_merge, avg_stack, stddev_stack = normal[k]
       print "%s %s" % (humanize(avg_merge), humanize(avg_stack))
+  for k in sorted(n, key=operator.itemgetter(0,1))[:60]:
+    print k
 
 
 
